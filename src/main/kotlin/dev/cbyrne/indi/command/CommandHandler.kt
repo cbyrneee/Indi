@@ -14,6 +14,7 @@ import dev.cbyrne.indi.command.impl.music.TogglePlaybackCommand
 import dev.cbyrne.indi.command.impl.superuser.ClearCacheCommand
 import dev.cbyrne.indi.command.impl.user.AvatarCommand
 import dev.cbyrne.indi.command.impl.utilities.InfoCommand
+import dev.cbyrne.indi.command.impl.utilities.InviteCommand
 import dev.cbyrne.indi.command.impl.utilities.PingCommand
 import dev.cbyrne.indi.extension.isAdministrator
 import dev.cbyrne.indi.extension.isSuperuser
@@ -36,6 +37,7 @@ object CommandHandler {
         registerCommand(HelpCommand())
         registerCommand(TogglePlaybackCommand())
         registerCommand(SkipCommand())
+        registerCommand(InviteCommand())
     }
 
     fun execute(message: Message, prefix: String) {
