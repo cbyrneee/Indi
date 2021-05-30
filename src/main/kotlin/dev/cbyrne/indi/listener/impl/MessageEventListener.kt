@@ -2,10 +2,7 @@ package dev.cbyrne.indi.listener.impl
 
 import dev.cbyrne.indi.Indi
 import dev.cbyrne.indi.command.CommandHandler
-import dev.cbyrne.indi.command.exception.CommandExecutionException
-import dev.cbyrne.indi.command.exception.CommandRequiresAdministratorException
-import dev.cbyrne.indi.command.exception.CommandRequiresArgumentsException
-import dev.cbyrne.indi.command.exception.CommandRequiresSuperuserException
+import dev.cbyrne.indi.command.exception.*
 import dev.cbyrne.indi.database.Database
 import dev.cbyrne.indi.embed.errorEmbed
 import dev.cbyrne.indi.extension.reply
@@ -25,6 +22,8 @@ class MessageEventListener : ListenerAdapter() {
 
         try {
             CommandHandler.execute(message, prefix)
+        } catch (ex: BotRequiresPermissionException) {
+            commandError(ex.message ?: "I do not have permission to do that", message)
         } catch (ex: CommandRequiresAdministratorException) {
             Indi.logger.warn("A non-administrator (${message.member!!.id}) has attempted to run a command which requires administrator privileges!")
             noPermissionError(message)
@@ -43,6 +42,7 @@ class MessageEventListener : ListenerAdapter() {
 
     private fun noPermissionError(message: Message) =
         commandError("You do not have permission to run this command", message)
+
 
     private fun commandError(reason: String, message: Message) =
         message.reply(errorEmbed(reason, message.author), false)
