@@ -6,6 +6,7 @@ import dev.cbyrne.indi.command.exception.CommandRequiresSuperuserException
 import dev.cbyrne.indi.command.impl.HelpCommand
 import dev.cbyrne.indi.command.impl.admin.ShutdownCommand
 import dev.cbyrne.indi.command.impl.admin.SuperuserCommand
+import dev.cbyrne.indi.command.impl.moderation.KickCommand
 import dev.cbyrne.indi.command.impl.moderation.PrefixCommand
 import dev.cbyrne.indi.command.impl.music.*
 import dev.cbyrne.indi.command.impl.superuser.ClearCacheCommand
@@ -36,6 +37,7 @@ object CommandHandler {
         registerCommand(SkipCommand())
         registerCommand(InviteCommand())
         registerCommand(NowPlayingCommand())
+        registerCommand(KickCommand())
     }
 
     fun execute(message: Message, prefix: String) {
