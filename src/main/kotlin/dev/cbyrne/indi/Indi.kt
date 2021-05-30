@@ -17,7 +17,14 @@ class Indi {
     companion object {
         val logger: Logger = LogManager.getLogger("Indi")
         val defaultPermissions =
-            listOf(Permission.MESSAGE_WRITE, Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_MANAGE)
+            listOf(
+                Permission.MESSAGE_WRITE,
+                Permission.MESSAGE_ATTACH_FILES,
+                Permission.MESSAGE_MANAGE,
+                Permission.VOICE_CONNECT,
+                Permission.VOICE_SPEAK,
+                Permission.KICK_MEMBERS
+            )
 
         lateinit var playerManager: DefaultAudioPlayerManager
     }
