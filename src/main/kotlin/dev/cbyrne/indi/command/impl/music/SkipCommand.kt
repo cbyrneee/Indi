@@ -3,6 +3,7 @@ package dev.cbyrne.indi.command.impl.music
 import dev.cbyrne.indi.command.CommandCategory
 import dev.cbyrne.indi.command.IndiCommand
 import dev.cbyrne.indi.command.exception.CommandExecutionException
+import dev.cbyrne.indi.extension.completedReaction
 import dev.cbyrne.indi.extension.inVoiceChannelWith
 import dev.cbyrne.indi.extension.musicManager
 import net.dv8tion.jda.api.entities.Guild
@@ -27,6 +28,6 @@ class SkipCommand :
             throw CommandExecutionException("We are not in the same voice channel")
 
         guild.musicManager.eventAdapter.nextTrack()
-        message.addReaction("✅").queue()
+        message.completedReaction()
     }
 }

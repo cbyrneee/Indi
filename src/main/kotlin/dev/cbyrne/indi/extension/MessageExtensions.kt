@@ -11,3 +11,5 @@ fun Message.reply(embed: MessageEmbed, mention: Boolean, success: ((Message) -> 
 
 fun Message.editMessage(embed: MessageEmbed, mention: Boolean) =
     editMessage(embed).mentionRepliedUser(mention).queue()
+
+fun Message.completedReaction() = addReaction("✅").queue()

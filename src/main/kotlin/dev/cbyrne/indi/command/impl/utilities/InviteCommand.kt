@@ -5,6 +5,7 @@ import dev.cbyrne.indi.command.CommandCategory
 import dev.cbyrne.indi.command.IndiCommand
 import dev.cbyrne.indi.command.exception.CommandExecutionException
 import dev.cbyrne.indi.embed.neutralEmbed
+import dev.cbyrne.indi.extension.completedReaction
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message
@@ -30,6 +31,6 @@ class InviteCommand :
             throw CommandExecutionException("I was unable to DM you, please make sure that you have DMs turned on for server members!")
         }
         
-        message.addReaction("✅").queue()
+        message.completedReaction()
     }
 }

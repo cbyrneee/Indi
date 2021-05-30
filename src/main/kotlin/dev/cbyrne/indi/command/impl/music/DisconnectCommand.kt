@@ -4,6 +4,7 @@ import dev.cbyrne.indi.command.CommandCategory
 import dev.cbyrne.indi.command.IndiCommand
 import dev.cbyrne.indi.command.exception.CommandExecutionException
 import dev.cbyrne.indi.embed.neutralEmbed
+import dev.cbyrne.indi.extension.completedReaction
 import dev.cbyrne.indi.extension.inVoiceChannelWith
 import dev.cbyrne.indi.extension.musicManager
 import dev.cbyrne.indi.extension.reply
@@ -29,6 +30,6 @@ class DisconnectCommand :
             throw CommandExecutionException("We are not in the same voice channel")
 
         guild.musicManager.eventAdapter.endSession()
-        message.addReaction("✅").queue()
+        message.completedReaction()
     }
 }
