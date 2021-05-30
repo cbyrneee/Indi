@@ -45,7 +45,7 @@ class PlayCommand :
             if (arguments.size >= 2) "ytsearch: ${arguments.joinToString(" ")}" else arguments[0],
             object : AudioLoadResultHandler {
                 override fun trackLoaded(track: AudioTrack) {
-                    message.reply(track.embed("Added to queue", message.author), true)
+                    message.reply(track.embed("Added to queue", message.author), false)
                     guild.musicManager.eventAdapter.queue(track, sender, message.textChannel)
                 }
 
@@ -55,7 +55,7 @@ class PlayCommand :
                         val track = playlist.tracks[0]
                         guild.musicManager.eventAdapter.queue(track, sender, message.textChannel)
 
-                        message.reply(track.embed("Added to queue", message.author), true)
+                        message.reply(track.embed("Added to queue", message.author), false)
                     } else {
                         playlist.tracks.forEach {
                             guild.musicManager.eventAdapter.queue(it, sender, message.textChannel)
