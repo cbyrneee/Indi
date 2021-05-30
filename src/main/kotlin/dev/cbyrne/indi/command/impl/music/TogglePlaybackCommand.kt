@@ -29,10 +29,13 @@ class TogglePlaybackCommand :
             throw CommandExecutionException("We are not in the same voice channel")
 
         guild.musicManager.player.isPaused = !guild.musicManager.player.isPaused
-        val isPaused = guild.musicManager.player.isPaused
 
         return message.reply(
-            neutralEmbed("Playback", "Playback has been ${if (isPaused) "paused" else "resumed"}", sender.user),
+            neutralEmbed(
+                "Playback",
+                "Playback has been ${if (guild.musicManager.player.isPaused) "paused" else "resumed"}",
+                sender.user
+            ),
             false
         )
     }

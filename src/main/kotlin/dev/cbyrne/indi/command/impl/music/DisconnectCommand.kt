@@ -29,14 +29,6 @@ class DisconnectCommand :
             throw CommandExecutionException("We are not in the same voice channel")
 
         guild.musicManager.eventAdapter.endSession()
-
-        message.reply(
-            neutralEmbed(
-                "Disconnect",
-                "I have left the voice channel",
-                sender.user
-            ),
-            false
-        )
+        message.addReaction("✅").queue()
     }
 }

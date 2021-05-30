@@ -46,41 +46,14 @@ class PlayCommand :
             if (arguments.size >= 2) "ytsearch: ${arguments.joinToString(" ")}" else arguments[0],
             object : AudioLoadResultHandler {
                 override fun trackLoaded(track: AudioTrack) {
-                    message.reply(
-                        embed {
-                            title = "Added to queue"
-
-                            field("Title", track.info.title)
-                            field("Artist", track.info.author, true)
-                            field("Duration", DurationFormatUtils.formatDuration(track.info.length, "HH:mm:ss"), true)
-
-                            requester(sender.user)
-                            timestamp()
-                        }, false
-                    )
-
+                    addedToQueueEmbed(message, track)
                     guild.musicManager.eventAdapter.queue(track, sender, message.textChannel)
                 }
 
                 override fun playlistLoaded(playlist: AudioPlaylist) {
                     if (arguments.size >= 2) {
                         val track = playlist.tracks[0]
-                        message.reply(
-                            embed {
-                                title = "Added to queue"
-
-                                field("Title", track.info.title)
-                                field("Artist", track.info.author, true)
-                                field(
-                                    "Duration",
-                                    DurationFormatUtils.formatDuration(track.info.length, "HH:mm:ss"),
-                                    true
-                                )
-
-                                requester(sender.user)
-                                timestamp()
-                            }, false
-                        )
+                        addedToQueueEmbed(message, track)
 
                         return guild.musicManager.eventAdapter.queue(
                             track,
@@ -121,5 +94,24 @@ class PlayCommand :
                     )
                 }
             })
+    }
+
+    private fun addedToQueueEmbed(message: Message, track: AudioTrack) {
+        message.reply(
+            embed {
+                title = "Added to queue"
+
+                field("Title", track.info.title)
+                field("Artist", track.info.author, true)
+                field(
+                    "Duration",
+                    DurationFormatUtils.formatDuration(track.info.length, "HH:mm:ss"),
+                    true
+                )
+
+                requester(message.author)
+                timestamp()
+            }, false
+        )
     }
 }

@@ -13,7 +13,7 @@ import java.lang.management.ManagementFactory
 class InfoCommand :
     IndiCommand(
         name = "info",
-        description = "See some information about Indi",
+        description = "Get Indi's uptime, amount of guilds, and more",
         category = CommandCategory.UTILITIES
     ) {
     override fun execute(sender: Member, guild: Guild, message: Message, arguments: List<String>) {
