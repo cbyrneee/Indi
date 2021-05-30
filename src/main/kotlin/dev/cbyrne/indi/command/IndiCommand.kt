@@ -4,6 +4,7 @@ import dev.cbyrne.indi.command.exception.CommandExecutionException
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message
+import net.dv8tion.jda.api.events.interaction.ButtonClickEvent
 
 abstract class IndiCommand(
     val name: String,
@@ -17,4 +18,6 @@ abstract class IndiCommand(
 ) {
     @Throws(CommandExecutionException::class)
     abstract fun execute(sender: Member, guild: Guild, message: Message, arguments: List<String> = listOf())
+
+    open fun onButtonClick(event: ButtonClickEvent): Boolean = false
 }

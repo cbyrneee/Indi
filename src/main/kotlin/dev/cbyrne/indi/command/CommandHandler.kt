@@ -18,6 +18,7 @@ import dev.cbyrne.indi.extension.isAdministrator
 import dev.cbyrne.indi.extension.isSuperuser
 import net.dv8tion.jda.api.entities.Message
 import net.dv8tion.jda.api.entities.User
+import net.dv8tion.jda.api.events.interaction.ButtonClickEvent
 
 object CommandHandler {
     private val commands = mutableListOf<IndiCommand>()
@@ -55,6 +56,12 @@ object CommandHandler {
         if (arguments.isEmpty() && command.requiresArguments) throw CommandRequiresArgumentsException()
         command.execute(message.member!!, message.guild, message, arguments)
     }
+
+    fun buttonClicked(event: ButtonClickEvent) =
+        commands.forEach {
+            if (it.onButtonClick(event))
+                return@forEach
+        }
 
     fun getVisibleCommands(user: User) = commands.filter {
         if (it.requiresSuperuser) user.isSuperuser
