@@ -7,6 +7,7 @@ import dev.cbyrne.indi.config.Configuration
 import dev.cbyrne.indi.database.Database
 import dev.cbyrne.indi.listener.ListenerHandler
 import net.dv8tion.jda.api.JDABuilder
+import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Activity
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -15,6 +16,9 @@ import org.apache.logging.log4j.Logger
 class Indi {
     companion object {
         val logger: Logger = LogManager.getLogger("Indi")
+        val defaultPermissions =
+            listOf(Permission.MESSAGE_WRITE, Permission.MESSAGE_ATTACH_FILES, Permission.MESSAGE_MANAGE)
+
         lateinit var playerManager: DefaultAudioPlayerManager
     }
 
