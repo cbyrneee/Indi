@@ -47,3 +47,8 @@ class Indi {
         AudioSourceManagers.registerLocalSource(playerManager)
     }
 }
+
+fun main() {
+    val indi = Indi()
+    indi.start()
+}

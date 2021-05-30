@@ -33,5 +33,5 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
 }
 
 application {
-    mainClass.set("IndiMainKt")
+    mainClass.set("dev.cbyrne.indi.IndiKt")
 }
