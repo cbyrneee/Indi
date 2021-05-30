@@ -20,11 +20,17 @@ class IndiAudioEventAdapter(
 ) : AudioEventAdapter() {
     private val queue = LinkedBlockingQueue<TrackInfo>()
 
+    var currentTrack: TrackInfo? = null
+
     fun queue(track: AudioTrack, author: Member, textChannel: TextChannel) {
         Indi.logger.info("Queuing track '${track.info.title}' by ${track.info.author} for guild ${audioManager.guild.id}")
 
-        if (!audioPlayer.startTrack(track, true))
-            queue.add(TrackInfo(track, author, textChannel))
+        val info = TrackInfo(track, author, textChannel)
+        if (!audioPlayer.startTrack(track, true)) {
+            queue.add(info)
+        } else {
+            currentTrack = info
+        }
     }
 
     override fun onTrackEnd(player: AudioPlayer, track: AudioTrack, endReason: AudioTrackEndReason) {
@@ -60,10 +66,13 @@ class IndiAudioEventAdapter(
         }
 
         val track = trackInfo.track
+
         Indi.logger.info("Playing track '${track.info.title}' by ${track.info.author} in guild ${audioManager.guild.id}")
+        trackInfo.textChannel.sendMessage(track.embed("Now playing", trackInfo.author.user)).queue()
 
         audioPlayer.playTrack(track)
-        trackInfo.textChannel.sendMessage(track.embed("Now playing", trackInfo.author.user)).queue()
+        currentTrack = trackInfo
+
         return trackInfo
     }
 }

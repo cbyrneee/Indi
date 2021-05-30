@@ -7,10 +7,7 @@ import dev.cbyrne.indi.command.impl.HelpCommand
 import dev.cbyrne.indi.command.impl.admin.ShutdownCommand
 import dev.cbyrne.indi.command.impl.admin.SuperuserCommand
 import dev.cbyrne.indi.command.impl.moderation.PrefixCommand
-import dev.cbyrne.indi.command.impl.music.DisconnectCommand
-import dev.cbyrne.indi.command.impl.music.PlayCommand
-import dev.cbyrne.indi.command.impl.music.SkipCommand
-import dev.cbyrne.indi.command.impl.music.TogglePlaybackCommand
+import dev.cbyrne.indi.command.impl.music.*
 import dev.cbyrne.indi.command.impl.superuser.ClearCacheCommand
 import dev.cbyrne.indi.command.impl.user.AvatarCommand
 import dev.cbyrne.indi.command.impl.utilities.InfoCommand
@@ -38,6 +35,7 @@ object CommandHandler {
         registerCommand(TogglePlaybackCommand())
         registerCommand(SkipCommand())
         registerCommand(InviteCommand())
+        registerCommand(NowPlayingCommand())
     }
 
     fun execute(message: Message, prefix: String) {
