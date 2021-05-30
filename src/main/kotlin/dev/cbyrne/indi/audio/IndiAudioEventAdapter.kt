@@ -23,6 +23,7 @@ class IndiAudioEventAdapter(
 
     fun queue(track: AudioTrack, author: Member, textChannel: TextChannel) {
         Indi.logger.info("Queuing track '${track.info.title}' by ${track.info.author} for guild ${audioManager.guild.id}")
+
         if (!audioPlayer.startTrack(track, true))
             queue.add(TrackInfo(track, author, textChannel))
     }
@@ -33,28 +34,24 @@ class IndiAudioEventAdapter(
     }
 
     override fun onTrackException(player: AudioPlayer, track: AudioTrack, exception: FriendlyException) {
+        endSession()
         Indi.logger.info("An error occurred when playing track for guild ${audioManager.guild.id}: ${exception.message}")
 
-        return trackError(
-            exception.message ?: "An unknown error has occurred",
-            if (queue.isEmpty()) null else queue.element()
+        val trackInfo = queue.element() ?: return
+        trackInfo.textChannel.sendMessage(
+            errorEmbed(
+                "I can't play ${track.info.title} by ${track.info.author}\nReason: ${exception.localizedMessage}",
+                trackInfo.author.user
+            )
         )
     }
-
-    private fun clearQueue() = queue.clear()
 
     fun endSession() {
         Indi.logger.info("Ending session for guild ${audioManager.guild.id}")
 
         audioPlayer.stopTrack()
         audioManager.closeAudioConnection()
-
-        clearQueue()
-    }
-
-    private fun trackError(message: String, track: TrackInfo?) {
-        track?.textChannel?.sendMessage(errorEmbed(message, track.author.user))?.queue()
-        endSession()
+        queue.clear()
     }
 
     fun nextTrack(): TrackInfo? {
