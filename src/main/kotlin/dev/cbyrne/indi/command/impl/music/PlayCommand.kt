@@ -8,15 +8,14 @@ import dev.cbyrne.indi.Indi
 import dev.cbyrne.indi.command.CommandCategory
 import dev.cbyrne.indi.command.IndiCommand
 import dev.cbyrne.indi.command.exception.CommandExecutionException
-import dev.cbyrne.indi.embed.embed
 import dev.cbyrne.indi.embed.errorEmbed
+import dev.cbyrne.indi.extension.embed
 import dev.cbyrne.indi.extension.inVoiceChannelWith
 import dev.cbyrne.indi.extension.musicManager
 import dev.cbyrne.indi.extension.reply
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message
-import org.apache.commons.lang3.time.DurationFormatUtils
 
 class PlayCommand :
     IndiCommand(
@@ -46,37 +45,24 @@ class PlayCommand :
             if (arguments.size >= 2) "ytsearch: ${arguments.joinToString(" ")}" else arguments[0],
             object : AudioLoadResultHandler {
                 override fun trackLoaded(track: AudioTrack) {
-                    addedToQueueEmbed(message, track)
+                    message.reply(track.embed("Added to queue", message.author), true)
                     guild.musicManager.eventAdapter.queue(track, sender, message.textChannel)
                 }
 
                 override fun playlistLoaded(playlist: AudioPlaylist) {
+                    // If the operation was a search, we only want to add the first result
                     if (arguments.size >= 2) {
                         val track = playlist.tracks[0]
-                        addedToQueueEmbed(message, track)
+                        guild.musicManager.eventAdapter.queue(track, sender, message.textChannel)
 
-                        return guild.musicManager.eventAdapter.queue(
-                            track,
-                            sender,
-                            message.textChannel
-                        )
+                        message.reply(track.embed("Added to queue", message.author), true)
+                    } else {
+                        playlist.tracks.forEach {
+                            guild.musicManager.eventAdapter.queue(it, sender, message.textChannel)
+                        }
+
+                        message.reply(playlist.embed("Added to queue", message.author), false)
                     }
-
-                    playlist.tracks.forEach {
-                        guild.musicManager.eventAdapter.queue(it, sender, message.textChannel)
-                    }
-
-                    message.reply(
-                        embed {
-                            title = "Added to queue"
-                            description = "This playlist has been added to the queue"
-
-                            field("Tracks", "${playlist.tracks.size}")
-
-                            requester(sender.user)
-                            timestamp()
-                        }, false
-                    )
                 }
 
                 override fun noMatches() {
@@ -86,6 +72,7 @@ class PlayCommand :
 
                 override fun loadFailed(exception: FriendlyException) {
                     guild.audioManager.closeAudioConnection()
+
                     message.reply(
                         errorEmbed(
                             exception.message ?: "An unknown error occurred when loading that track",
@@ -94,24 +81,5 @@ class PlayCommand :
                     )
                 }
             })
-    }
-
-    private fun addedToQueueEmbed(message: Message, track: AudioTrack) {
-        message.reply(
-            embed {
-                title = "Added to queue"
-
-                field("Title", track.info.title)
-                field("Artist", track.info.author, true)
-                field(
-                    "Duration",
-                    DurationFormatUtils.formatDuration(track.info.length, "HH:mm:ss"),
-                    true
-                )
-
-                requester(message.author)
-                timestamp()
-            }, false
-        )
     }
 }

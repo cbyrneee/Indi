@@ -7,12 +7,11 @@ import com.sedmelluq.discord.lavaplayer.track.AudioTrack
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason
 import dev.cbyrne.indi.Indi
 import dev.cbyrne.indi.audio.info.TrackInfo
-import dev.cbyrne.indi.embed.embed
 import dev.cbyrne.indi.embed.errorEmbed
+import dev.cbyrne.indi.extension.embed
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.TextChannel
 import net.dv8tion.jda.api.managers.AudioManager
-import org.apache.commons.lang3.time.DurationFormatUtils
 import java.util.concurrent.LinkedBlockingQueue
 
 class IndiAudioEventAdapter(
@@ -61,19 +60,10 @@ class IndiAudioEventAdapter(
         }
 
         val track = trackInfo.track
-        audioPlayer.playTrack(track)
-
-        trackInfo.textChannel.sendMessage(embed {
-            title = "Now Playing"
-
-            field("Title", track.info.title)
-            field("Artist", track.info.author, true)
-            field("Duration", DurationFormatUtils.formatDuration(track.info.length, "HH:mm:ss"), true)
-
-            requester(trackInfo.author.user)
-        }).queue()
-
         Indi.logger.info("Playing track '${track.info.title}' by ${track.info.author} in guild ${audioManager.guild.id}")
+
+        audioPlayer.playTrack(track)
+        trackInfo.textChannel.sendMessage(track.embed("Now playing", trackInfo.author.user)).queue()
         return trackInfo
     }
 }
