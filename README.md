@@ -2,7 +2,7 @@
 
 # Indi
 
-A discord bot designed to be the only bot that you need
+A simple discord bot with a wide range of features
 
 </div>
 
