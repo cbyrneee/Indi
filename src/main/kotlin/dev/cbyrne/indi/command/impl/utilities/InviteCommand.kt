@@ -30,7 +30,7 @@ class InviteCommand :
         } catch (t: Throwable) {
             throw CommandExecutionException("I was unable to DM you, please make sure that you have DMs turned on for server members!")
         }
-        
+
         message.completedReaction()
     }
 }

@@ -3,11 +3,9 @@ package dev.cbyrne.indi.command.impl.music
 import dev.cbyrne.indi.command.CommandCategory
 import dev.cbyrne.indi.command.IndiCommand
 import dev.cbyrne.indi.command.exception.CommandExecutionException
-import dev.cbyrne.indi.embed.neutralEmbed
 import dev.cbyrne.indi.extension.completedReaction
 import dev.cbyrne.indi.extension.inVoiceChannelWith
 import dev.cbyrne.indi.extension.musicManager
-import dev.cbyrne.indi.extension.reply
 import net.dv8tion.jda.api.entities.Guild
 import net.dv8tion.jda.api.entities.Member
 import net.dv8tion.jda.api.entities.Message

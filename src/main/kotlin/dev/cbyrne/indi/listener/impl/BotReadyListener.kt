@@ -2,7 +2,6 @@ package dev.cbyrne.indi.listener.impl
 
 import dev.cbyrne.indi.Indi
 import dev.cbyrne.indi.config.Configuration
-import net.dv8tion.jda.api.Permission
 import net.dv8tion.jda.api.entities.Activity
 import net.dv8tion.jda.api.events.ReadyEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
