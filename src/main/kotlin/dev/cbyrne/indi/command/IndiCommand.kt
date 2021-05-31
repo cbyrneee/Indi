@@ -19,5 +19,13 @@ abstract class IndiCommand(
     @Throws(CommandExecutionException::class)
     abstract fun execute(sender: Member, guild: Guild, message: Message, arguments: List<String> = listOf())
 
+    @Throws(CommandExecutionException::class)
+    protected fun getTarget(message: Message, arguments: List<String>) =
+        runCatching {
+            message.jda.retrieveUserById(arguments[0]).complete()
+        }.getOrElse {
+            message.mentionedUsers.getOrNull(0)
+        } ?: throw CommandExecutionException("You must mention a valid user or give their ID")
+
     open fun onButtonClick(event: ButtonClickEvent): Boolean = false
 }

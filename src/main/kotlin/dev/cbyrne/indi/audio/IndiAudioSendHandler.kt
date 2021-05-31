@@ -14,6 +14,5 @@ class IndiAudioSendHandler(private val audioPlayer: AudioPlayer) : AudioSendHand
     }
 
     override fun provide20MsAudio(): ByteBuffer = ByteBuffer.wrap(lastFrame!!.data)
-
     override fun isOpus() = true
 }

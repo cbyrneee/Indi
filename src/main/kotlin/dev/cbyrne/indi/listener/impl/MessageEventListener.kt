@@ -43,7 +43,6 @@ class MessageEventListener : ListenerAdapter() {
     private fun noPermissionError(message: Message) =
         commandError("You do not have permission to run this command", message)
 
-
     private fun commandError(reason: String, message: Message) =
         message.reply(errorEmbed(reason, message.author), false)
 

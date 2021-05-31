@@ -18,19 +18,18 @@ class InviteCommand :
     ) {
     override fun execute(sender: Member, guild: Guild, message: Message, arguments: List<String>) {
         try {
-            message.author.openPrivateChannel().queue {
-                it.sendMessage(
-                    neutralEmbed(
-                        "Invite Link",
-                        "[Click here to invite me to your server!](${guild.jda.getInviteUrl(Indi.defaultPermissions)})",
-                        sender.user
-                    )
-                ).queue()
-            }
+            val channel = message.author.openPrivateChannel().complete()
+            channel.sendMessage(
+                neutralEmbed(
+                    "Invite Link",
+                    "[Click here to invite me to your server!](${guild.jda.getInviteUrl(Indi.defaultPermissions)})",
+                    sender.user
+                )
+            ).complete()
+
+            message.completedReaction()
         } catch (t: Throwable) {
             throw CommandExecutionException("I was unable to DM you, please make sure that you have DMs turned on for server members!")
         }
-
-        message.completedReaction()
     }
 }

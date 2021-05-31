@@ -29,7 +29,6 @@ class TogglePlaybackCommand :
             throw CommandExecutionException("We are not in the same voice channel")
 
         guild.musicManager.player.isPaused = !guild.musicManager.player.isPaused
-
         return message.reply(
             neutralEmbed(
                 "Playback",

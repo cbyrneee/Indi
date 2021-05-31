@@ -41,45 +41,48 @@ class PlayCommand :
             throw CommandExecutionException("We are not in the same voice channel")
         }
 
-        Indi.playerManager.loadItem(
-            if (arguments.size >= 2) "ytsearch: ${arguments.joinToString(" ")}" else arguments[0],
-            object : AudioLoadResultHandler {
-                override fun trackLoaded(track: AudioTrack) {
-                    message.reply(track.embed("Added to queue", message.author), false)
-                    guild.musicManager.eventAdapter.queue(track, sender, message.textChannel)
+        val query = if (arguments.size >= 2) "ytsearch: ${arguments.joinToString(" ")}" else arguments[0]
+        Indi.playerManager.loadItem(query, IndiAudioLoadResultHandler(message, sender, arguments.size >= 2))
+    }
+
+    class IndiAudioLoadResultHandler(
+        private val message: Message,
+        private val sender: Member,
+        private val isSearch: Boolean = false
+    ) : AudioLoadResultHandler {
+        override fun trackLoaded(track: AudioTrack) {
+            message.reply(track.embed("Added to queue", message.author), false)
+            message.guild.musicManager.eventAdapter.queue(track, sender, message.textChannel)
+        }
+
+        override fun playlistLoaded(playlist: AudioPlaylist) {
+            if (isSearch) {
+                val track = playlist.tracks[0]
+                message.guild.musicManager.eventAdapter.queue(track, sender, message.textChannel)
+
+                message.reply(track.embed("Added to queue", message.author), false)
+            } else {
+                playlist.tracks.forEach {
+                    message.guild.musicManager.eventAdapter.queue(it, sender, message.textChannel)
                 }
 
-                override fun playlistLoaded(playlist: AudioPlaylist) {
-                    // If the operation was a search, we only want to add the first result
-                    if (arguments.size >= 2) {
-                        val track = playlist.tracks[0]
-                        guild.musicManager.eventAdapter.queue(track, sender, message.textChannel)
+                message.reply(playlist.embed("Added to queue", message.author), false)
+            }
+        }
 
-                        message.reply(track.embed("Added to queue", message.author), false)
-                    } else {
-                        playlist.tracks.forEach {
-                            guild.musicManager.eventAdapter.queue(it, sender, message.textChannel)
-                        }
+        override fun noMatches() {
+            message.guild.audioManager.closeAudioConnection()
+            message.reply(errorEmbed("No matches found", sender.user), false)
+        }
 
-                        message.reply(playlist.embed("Added to queue", message.author), false)
-                    }
-                }
-
-                override fun noMatches() {
-                    guild.audioManager.closeAudioConnection()
-                    message.reply(errorEmbed("No matches found", sender.user), false)
-                }
-
-                override fun loadFailed(exception: FriendlyException) {
-                    guild.audioManager.closeAudioConnection()
-
-                    message.reply(
-                        errorEmbed(
-                            exception.message ?: "An unknown error occurred when loading that track",
-                            sender.user
-                        ), false
-                    )
-                }
-            })
+        override fun loadFailed(exception: FriendlyException) {
+            message.guild.audioManager.closeAudioConnection()
+            message.reply(
+                errorEmbed(
+                    exception.message ?: "An unknown error occurred when loading that track",
+                    sender.user
+                ), false
+            )
+        }
     }
 }

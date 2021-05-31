@@ -5,7 +5,5 @@ import net.dv8tion.jda.api.events.interaction.ButtonClickEvent
 import net.dv8tion.jda.api.hooks.ListenerAdapter
 
 class ButtonClickListener : ListenerAdapter() {
-    override fun onButtonClick(event: ButtonClickEvent) {
-        CommandHandler.buttonClicked(event)
-    }
+    override fun onButtonClick(event: ButtonClickEvent) = CommandHandler.buttonClicked(event)
 }

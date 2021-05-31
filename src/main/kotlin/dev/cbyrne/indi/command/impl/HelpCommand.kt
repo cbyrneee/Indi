@@ -27,12 +27,11 @@ class HelpCommand : IndiCommand(
                 .sortedBy { it.key.displayName }
                 .forEach { (category, commands) ->
                     val content = commands.joinToString("\n") {
-                        var description =
-                            if (it.requiresSuperuser)
-                                "${it.description} **(superuser)**"
-                            else if (it.requiresAdministrator)
-                                "${it.description} **(administrator)**"
-                            else it.description
+                        var description = when {
+                            it.requiresSuperuser -> "${it.description} **(superuser)**"
+                            it.requiresAdministrator -> "${it.description} **(administrator)**"
+                            else -> it.description
+                        }
 
                         if (it.aliases.isNotEmpty())
                             description += " (aliases: ${it.aliases.joinToString(", ")})"

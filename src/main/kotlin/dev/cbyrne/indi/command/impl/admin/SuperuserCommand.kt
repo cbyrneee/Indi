@@ -46,12 +46,7 @@ class SuperuserCommand : IndiCommand(
         if (arguments.size < 2)
             throw CommandIncorrectArgumentsException(arguments.size, 2)
 
-        val target = try {
-            guild.jda.getUserById(arguments[1])
-        } catch (t: Throwable) {
-            message.mentionedUsers.getOrNull(0)
-        } ?: throw CommandExecutionException("You must mention a valid user or give their ID")
-
+        val target = getTarget(message, arguments)
         if (target.isBot || target.isSystem)
             throw CommandExecutionException("This user is exempt from superuser modifications as they are a bot")
 

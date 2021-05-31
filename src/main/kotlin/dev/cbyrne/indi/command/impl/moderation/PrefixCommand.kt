@@ -24,18 +24,14 @@ class PrefixCommand : IndiCommand(
             throw CommandRequiresPermissionException(Permission.MANAGE_SERVER)
 
         val guildDocument = Database.getOrInsertGuild(guild)
-        val newPrefix = arguments.getOrNull(0)
+        val newPrefix = arguments.getOrNull(0) ?: return message.reply(
+            neutralEmbed("Prefix", "This server's prefix is ``${guildDocument.prefix}``", sender.user),
+            false
+        )
 
-        if (newPrefix != null) {
-            guildDocument.prefix = newPrefix
-            Database.updateGuild(guildDocument)
+        guildDocument.prefix = newPrefix
+        Database.updateGuild(guildDocument)
 
-            message.reply(successEmbed("Prefix", "Changed the server prefix to ``$newPrefix``", sender.user), false)
-        } else {
-            message.reply(
-                neutralEmbed("Prefix", "This server's prefix is ``${guildDocument.prefix}``", sender.user),
-                false
-            )
-        }
+        message.reply(successEmbed("Prefix", "Changed the server prefix to ``$newPrefix``", sender.user), false)
     }
 }

@@ -9,7 +9,4 @@ fun Message.reply(content: CharSequence, mention: Boolean, success: ((Message) -
 fun Message.reply(embed: MessageEmbed, mention: Boolean, success: ((Message) -> Unit) = {}) =
     reply(embed).mentionRepliedUser(mention).queue(success)
 
-fun Message.editMessage(embed: MessageEmbed, mention: Boolean) =
-    editMessage(embed).mentionRepliedUser(mention).queue()
-
 fun Message.completedReaction() = addReaction("✅").queue()

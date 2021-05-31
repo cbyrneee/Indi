@@ -17,12 +17,12 @@ class AvatarCommand :
         aliases = listOf("av")
     ) {
     override fun execute(sender: Member, guild: Guild, message: Message, arguments: List<String>) {
-        val user = message.mentionedUsers.firstOrNull() ?: sender.user
-        val avatarUrl = user.avatarUrl ?: user.defaultAvatarUrl
+        val target = runCatching { getTarget(message, arguments) }.getOrElse { sender.user }
+        val avatarUrl = target.avatarUrl ?: target.defaultAvatarUrl
 
         return message.reply(
             embed {
-                title = "Avatar for ${user.asReference}"
+                title = "Avatar for ${target.asReference}"
                 description = "[Link](${avatarUrl})"
 
                 image(avatarUrl)
